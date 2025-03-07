@@ -402,7 +402,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 422239750}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 630056a749dc8504aa28e0b86401c2e8, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &422239750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1021,10 +1033,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0d95020fa9c93140b3dddfd8a6c3167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashPower: 25
+  dashDuration: 0.2
+  isDashing: 0
   jumpPower: 14
-  isFacingRight: 1
   canJump: 1
-  jumpCooldown: 2.9
+  jumpCooldown: 1.51
   rb: {fileID: 1179693153}
   inputReader: {fileID: 1317679915}
   groundCheck: {fileID: 1362097576}

@@ -46,6 +46,11 @@ public class InputReader : MonoBehaviour
         //Debug.Log(state);
     }
 
+    private void checkButtonPress()
+    {
+        Debug.Log("The button is pressed");
+    }
+
 
     //detect the swipe direction
     //wish I could optimize this
