@@ -36,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         switch(inputReader.state){
             //jump
             case "Up":
@@ -57,21 +56,49 @@ public class PlayerMovement : MonoBehaviour
                 break;
             //dash left
             case "Left":
-                if (!isDashing )
+                if (!isDashing && dashCounter > 0)
                 {
                     StartCoroutine(Dash(Vector2.left));
                     dashCounter--;
                 }
                 break;
-            //stomp - working only when in air (kinda finicky to pull it off for some reason)
+            //stomp - working only when in air
             case "Down":
                 if(!isGrounded())
                 {
                     rb.velocity = new Vector2(0, -3*jumpPower);
                 }
                 break;
-            //why is this here?
-            case "None":
+            //diagonal dashes - considering as a dash
+            case "Up-Right":
+                if (!isDashing && dashCounter > 0)
+                {
+                    StartCoroutine(Dash(new Vector2(1, 1).normalized*0.75f));
+                    dashCounter--;
+                }
+                break;
+            case "Up-Left":
+                if (!isDashing && dashCounter > 0)
+                {
+                    StartCoroutine(Dash(new Vector2(-1, 1).normalized*0.75f));
+                    dashCounter--;
+                }
+                break;
+            //diagonal stomps - same as a stomp, just diagonal
+            //note: once I start coding the impact of the stomp, diagonal stomps will not have a shockwave
+            case "Down-Right":
+                if(!isGrounded())
+                {
+                    rb.velocity = new Vector2(1, -1).normalized*3*jumpPower;
+                    AirDrag = true;
+                }
+                break;
+            case "Down-Left":
+                if(!isGrounded())
+                {
+                    rb.velocity = new Vector2(-1, -1).normalized*3*jumpPower;
+                    AirDrag = true;
+                }
                 break;
             default:
                 break;
