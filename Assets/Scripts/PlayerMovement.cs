@@ -131,6 +131,11 @@ public class PlayerMovement : MonoBehaviour
         isDashing = false;
     }
 
+    public void WalkLeft()
+    {
+        rb.AddForce(Vector2.left * 10f, ForceMode2D.Impulse);
+    }
+
     private void FixedUpdate()
     {
         //smart code goes here
