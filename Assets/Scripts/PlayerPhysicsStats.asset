@@ -10,17 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6f50ae5a70ec0b438b5e5b70ebf2f45, type: 3}
-  m_Name: New Player Move Stats
+  m_Name: PlayerPhysicsStats
   m_EditorClassIdentifier: 
-  MaxwalkSpeed: 12.5
+  MaxwalkSpeed: 20
   GroundAcceleration: 5
-  GroundDeceleration: 20
+  GroundDeceleration: 5
   AirAcceleration: 5
   AirDeceleration: 5
   MaxRunSpeed: 20
   GroundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   GroundCheckDistance: 0.2
   HeadCheckDistance: 0.2
   HeadWidth: 0.5
+  jumpHeight: 6
+  JumpCompensation: 1.1
+  TimeTillApex: 0.5
+  GravityReleaseMult: 5
+  MaxFallSpeed: 25.9
+  JumpsAllowed: 2
+  TimeforCancel: 0.2
+  ApexThresh: 0.533
+  ApexTime: 0.05
+  JumpBufferTime: 0.1
+  JumpCoyoteTime: 0.1
+  DebugGroundCheckbox: 0
+  DebugHeadCheckbox: 0
+  ShowWalkJump: 0
+  StopOnCollision: 0
+  DrawRight: 0
+  JumpResolution: 49
+  VirtualizationSteps: 238

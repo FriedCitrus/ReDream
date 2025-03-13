@@ -8,16 +8,19 @@ public class InputManager : MonoBehaviour
     public static PlayerInput playerInput;
 
     public static Vector2 moveInput;
-    //public static bool JumpInput;
+    public static bool JumpInputPressed;
+    public static bool JumpInputHeld;
+    public static bool JumpInputReleased;
 
     private InputAction moveAction;
-    //private InputAction jumpAction;
+    private InputAction jumpAction;
+
     
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         moveAction = playerInput.actions["Move"];
-        //jumpAction = playerInput.Player.Jump;
+        jumpAction = playerInput.actions["Jump"];
     }
 
     private void Update()
@@ -31,6 +34,8 @@ public class InputManager : MonoBehaviour
         {
             Debug.Log("Left");
         }
-        //JumpInput = jumpAction.wasPressedThisFrame;
+        JumpInputPressed = jumpAction.WasPressedThisFrame();
+        JumpInputHeld = jumpAction.IsPressed();
+        JumpInputReleased = jumpAction.WasReleasedThisFrame();
     }
 }
