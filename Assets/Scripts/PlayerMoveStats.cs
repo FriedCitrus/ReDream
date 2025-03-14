@@ -16,6 +16,12 @@ public class PlayerMoveStats : ScriptableObject
     [Header("Run")]
     [Range(1f, 100f)] public float MaxRunSpeed = 20f;
 
+    [Header("Dash")]
+    public float DashSpeed = 20f;
+    public float DashTime = 0.2f;
+    public float DashCooldown = 1f;
+    public int DashCharges = 2;
+
     [Header("Ground Check")]
     public LayerMask GroundLayer;
     public float GroundCheckDistance = 0.02f;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputReader : MonoBehaviour
+public class SwipeReader : MonoBehaviour
 {   
     //variables
     private Vector2 startTouchPosition;
@@ -41,16 +41,11 @@ public class InputReader : MonoBehaviour
 
         }else{
             //if nothing is happening, it will be just this
+            //you can remove it if you want the constant feed of swipe information
             state = "None";
         }
-        //Debug.Log(state);
+        //Debug.Log(state); //in case you want to see the state in the console 
     }
-
-    private void checkButtonPress()
-    {
-        Debug.Log("The button is pressed");
-    }
-
 
     //detect the swipe direction
     //wish I could optimize this
