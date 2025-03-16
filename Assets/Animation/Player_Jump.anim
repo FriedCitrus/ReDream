@@ -21,9 +21,15 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
+<<<<<<< Updated upstream
       value: {fileID: 21300000, guid: 60d8fe505b775024690c599115bcad5d, type: 3}
     - time: 0.083333336
       value: {fileID: 21300000, guid: df9a75159ef46b04296611deffea3b54, type: 3}
+=======
+      value: {fileID: 21300000, guid: edf58603a688f024a97005ae3b8ce7fa, type: 3}
+    - time: 0.083333336
+      value: {fileID: 21300000, guid: 53ccaf13e06909b43a32db865e1015e5, type: 3}
+>>>>>>> Stashed changes
     attribute: m_Sprite
     path: 
     classID: 212
@@ -46,8 +52,13 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
+<<<<<<< Updated upstream
     - {fileID: 21300000, guid: 60d8fe505b775024690c599115bcad5d, type: 3}
     - {fileID: 21300000, guid: df9a75159ef46b04296611deffea3b54, type: 3}
+=======
+    - {fileID: 21300000, guid: edf58603a688f024a97005ae3b8ce7fa, type: 3}
+    - {fileID: 21300000, guid: 53ccaf13e06909b43a32db865e1015e5, type: 3}
+>>>>>>> Stashed changes
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
