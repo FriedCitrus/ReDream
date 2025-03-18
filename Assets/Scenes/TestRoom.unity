@@ -174,11 +174,40 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4325755574285826802, guid: a0e8295a760571149b778ee8805cb112, type: 3}
+      propertyPath: swipeReader
+      value: 
+      objectReference: {fileID: 602411387}
+    - target: {fileID: 8667490455179396912, guid: a0e8295a760571149b778ee8805cb112, type: 3}
+      propertyPath: playerSwipe
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1668771226882265132, guid: a0e8295a760571149b778ee8805cb112, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 602411387}
   m_SourcePrefab: {fileID: 100100000, guid: a0e8295a760571149b778ee8805cb112, type: 3}
+--- !u!1 &602411382 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1668771226882265132, guid: a0e8295a760571149b778ee8805cb112, type: 3}
+  m_PrefabInstance: {fileID: 148502661}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &602411387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 602411382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630056a749dc8504aa28e0b86401c2e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: None
 --- !u!4 &682882023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1989151694202233881, guid: a0e8295a760571149b778ee8805cb112, type: 3}
