@@ -44,24 +44,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PrimaryContact"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""43772ea1-237e-4145-a42a-d016fa449273"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""PrimaryPosition"",
-                    ""type"": ""PassThrough"",
-                    ""id"": ""c2aab234-5a17-4dc6-a442-d299095a7af9"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -130,28 +112,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1ce63ec4-1d36-42b3-aae9-0cbeef954313"",
-                    ""path"": ""<Touchscreen>/primaryTouch/press"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrimaryContact"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dc7d6235-ad1a-4b92-aa22-d07a070efbc8"",
-                    ""path"": ""<Touchscreen>/primaryTouch/position"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PrimaryPosition"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -162,8 +122,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_PrimaryContact = m_Player.FindAction("PrimaryContact", throwIfNotFound: true);
-        m_Player_PrimaryPosition = m_Player.FindAction("PrimaryPosition", throwIfNotFound: true);
     }
 
     ~@Controls()
@@ -232,16 +190,12 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_PrimaryContact;
-    private readonly InputAction m_Player_PrimaryPosition;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @PrimaryContact => m_Wrapper.m_Player_PrimaryContact;
-        public InputAction @PrimaryPosition => m_Wrapper.m_Player_PrimaryPosition;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -257,12 +211,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @PrimaryContact.started += instance.OnPrimaryContact;
-            @PrimaryContact.performed += instance.OnPrimaryContact;
-            @PrimaryContact.canceled += instance.OnPrimaryContact;
-            @PrimaryPosition.started += instance.OnPrimaryPosition;
-            @PrimaryPosition.performed += instance.OnPrimaryPosition;
-            @PrimaryPosition.canceled += instance.OnPrimaryPosition;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -273,12 +221,6 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @PrimaryContact.started -= instance.OnPrimaryContact;
-            @PrimaryContact.performed -= instance.OnPrimaryContact;
-            @PrimaryContact.canceled -= instance.OnPrimaryContact;
-            @PrimaryPosition.started -= instance.OnPrimaryPosition;
-            @PrimaryPosition.performed -= instance.OnPrimaryPosition;
-            @PrimaryPosition.canceled -= instance.OnPrimaryPosition;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -300,7 +242,5 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnPrimaryContact(InputAction.CallbackContext context);
-        void OnPrimaryPosition(InputAction.CallbackContext context);
     }
 }

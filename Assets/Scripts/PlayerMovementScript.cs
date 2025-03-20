@@ -9,6 +9,7 @@ public class PlayerMovementScript : MonoBehaviour
     public SwipeReader swipeReader;
     [SerializeField] private Collider2D feetcolider;
     [SerializeField] private Collider2D bodycolider;
+    [SerializeField]private SwipeDetection swipeDetection;
 
     private Rigidbody2D rb;
 
@@ -24,8 +25,7 @@ public class PlayerMovementScript : MonoBehaviour
     private Vector2 DashVelocity;
 
     //swipe variables
-    private Vector2 swipeDir;
-
+    private Vector2 DashDir;
 
     //collision variables
     private RaycastHit2D groundCheck;
@@ -60,12 +60,15 @@ public class PlayerMovementScript : MonoBehaviour
 
         isFacingRight = true;
 
+        //swipeDetection.SwipeDir = "None";
+
     } 
 
     private void Update()
     {
         JumpCheck();
         CountTimers();
+        //Debug.Log(swipeDetection.SwipeDir);
     }
 
     private void OnDrawGizmos()
@@ -81,16 +84,15 @@ public class PlayerMovementScript : MonoBehaviour
         CollisionCheck();
         Jump();
         
-        Dash();
-
-        
         if(isGrounded)
         {
             Move(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration, InputManager.moveInput);
+            //Dash(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration);
         }
         else
         {
             Move(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration, InputManager.moveInput);
+            //Dash(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration);
         }
     }
 
@@ -287,7 +289,7 @@ public class PlayerMovementScript : MonoBehaviour
         } 
         else if (moveInput == Vector2.zero)
         {
-            moveVelocity = Vector2.Lerp(moveVelocity, Vector2.zero, acceleration * Time.fixedDeltaTime);
+            moveVelocity = Vector2.Lerp(moveVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
             rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y)+DashVelocity;
         }
     }
@@ -319,23 +321,22 @@ public class PlayerMovementScript : MonoBehaviour
     }
 
     #region Dashes
-
-    private void Dash()
+/*
+    private void Dash(float acceleration, float deceleration)
     {   
-        if(DashCooldown>0f && DashCharges > 0 && swipeReader.state != "None")
+        if(DashCooldown>0f && DashCharges > 0 && swipeDetection.SwipeDir != "None")
         {
-            ConvertToVector(swipeReader.state);
+            ConvertToVector(swipeDetection.SwipeDir);
             DashCharges--;
             isDashing = true;
             Vector2 targetVelocity = Vector2.zero;
-            targetVelocity = new Vector2(swipeDir.x, swipeDir.y)*playerMoveStats.DashSpeed;
-            if(isGrounded)
+            targetVelocity = new Vector2(DashDir.x, DashDir.y)*playerMoveStats.DashSpeed;
+            DashVelocity = Vector2.Lerp(DashVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+
+            if(DashTime <= 0)
             {
-                DashVelocity = Vector2.Lerp(DashVelocity, targetVelocity, playerMoveStats.GroundAcceleration * Time.fixedDeltaTime);
-            }
-            else
-            {
-                DashVelocity = Vector2.Lerp(DashVelocity, targetVelocity, playerMoveStats.AirAcceleration * Time.fixedDeltaTime);
+                DashVelocity = Vector2.Lerp(DashVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+                DashTime = playerMoveStats.DashTime;
             }
         }
         else if(DashCooldown <= 0f && isGrounded)
@@ -343,6 +344,7 @@ public class PlayerMovementScript : MonoBehaviour
             DashCooldown = playerMoveStats.DashCooldown;
             DashCharges = playerMoveStats.DashCharges;
             isDashing = false;
+            swipeDetection.SwipeDir = "None";
         }
         
     }
@@ -352,36 +354,38 @@ public class PlayerMovementScript : MonoBehaviour
         switch(swipe)
         {
             case "Right":
-                swipeDir = new Vector2(1,0);
+                DashDir = new Vector2(1,0);
                 break;
             case "Up-Right":
-                swipeDir = new Vector2(1,1);
+                DashDir = new Vector2(1,1);
                 break;
             case "Up":
-                swipeDir = new Vector2(0,1);
+                DashDir = new Vector2(0,1);
                 break;
             case "Up-Left":
-                swipeDir = new Vector2(-1,1);
+                DashDir = new Vector2(-1,1);
                 break;
             case "Left":
-                swipeDir = new Vector2(-1,0);
+                DashDir = new Vector2(-1,0);
                 break;
             case "Down-Left":
-                swipeDir = new Vector2(-1,-1);
+                DashDir = new Vector2(-1,-1);
                 break;
             case "Down":
-                swipeDir = new Vector2(0,-1);
+                DashDir = new Vector2(0,-1);
                 break;
             case "Down-Right":
-                swipeDir = new Vector2(1,-1);
+                DashDir = new Vector2(1,-1);
+                break;
+            case "None":
+                DashDir = new Vector2(0,0);
                 break;
             default:
-                swipeDir = new Vector2(0,0);
                 break;
         }
     }
 
-
+*/
     #endregion
 
     #endregion

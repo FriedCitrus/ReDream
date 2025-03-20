@@ -57,34 +57,42 @@ public class SwipeReader : MonoBehaviour
         {
             if (swipeAngle >= -22.5f && swipeAngle < 22.5f)
             {
+                Debug.Log("Right");
                 return "Right";
             }
             else if (swipeAngle >= 22.5f && swipeAngle < 67.5f)
             {
+                Debug.Log("Up-Right");
                 return "Up-Right";
             }
             else if (swipeAngle >= 67.5f && swipeAngle < 112.5f)
             {
+                Debug.Log("Up");
                 return "Up";
             }
             else if (swipeAngle >= 112.5f && swipeAngle < 157.5f)
             {
+                Debug.Log("Up-Left");
                 return "Up-Left";
             }
             else if (swipeAngle >= 157.5f || swipeAngle < -157.5f)
             {
+                Debug.Log("Left");
                 return "Left";
             }
             else if (swipeAngle >= -157.5f && swipeAngle < -112.5f)
             {
+                Debug.Log("Down-Left");
                 return "Down-Left";
             }
             else if (swipeAngle >= -112.5f && swipeAngle < -67.5f)
             {
+                Debug.Log("Down");
                 return "Down";
             }
             else if (swipeAngle >= -67.5f && swipeAngle < -22.5f)
             {
+                Debug.Log("Down-Right");
                 return "Down-Right";
             }
         }

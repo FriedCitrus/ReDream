@@ -25,14 +25,6 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         moveInput = moveAction.ReadValue<Vector2>();
-        if (moveInput.x > 0)
-        {
-            Debug.Log("Right");
-        }
-        else if (moveInput.x < 0)
-        {
-            Debug.Log("Left");
-        }
         JumpInputPressed = jumpAction.WasPressedThisFrame();
         JumpInputHeld = jumpAction.IsPressed();
         JumpInputReleased = jumpAction.WasReleasedThisFrame();
