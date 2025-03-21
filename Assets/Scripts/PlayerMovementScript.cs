@@ -9,9 +9,11 @@ public class PlayerMovementScript : MonoBehaviour
     public SwipeReader swipeReader;
     [SerializeField] private Collider2D feetcolider;
     [SerializeField] private Collider2D bodycolider;
-    [SerializeField]private SwipeDetection swipeDetection;
-
+    //[SerializeField]private SwipeDetection swipeDetection;
     private Rigidbody2D rb;
+    private bool disabled;
+
+    private Vector2 PlayerRespawnPoint;
 
     //movement variables
     private Vector2 moveVelocity;
@@ -60,15 +62,26 @@ public class PlayerMovementScript : MonoBehaviour
 
         isFacingRight = true;
 
+        disabled = false;
+
         //swipeDetection.SwipeDir = "None";
 
+        var rect = new Rect(0f, 0f, 100f, 100f);
+        Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x + rect.width, rect.y ),Color.green);
+        Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x , rect.y + rect.height), Color.red);
+        Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x + rect.width, rect.y), Color.green);
+        Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x, rect.y + rect.height), Color.red);
     } 
 
     private void Update()
     {
-        JumpCheck();
-        CountTimers();
-        //Debug.Log(swipeDetection.SwipeDir);
+        if(!disabled)
+        {
+            JumpCheck();
+            CountTimers();
+            //Debug.Log(swipeDetection.SwipeDir);
+        }
+        
     }
 
     private void OnDrawGizmos()
@@ -81,19 +94,23 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CollisionCheck();
-        Jump();
+        if(!disabled)
+        {
+            CollisionCheck();
+            Jump();
+
+            if(isGrounded)
+            {
+                Move(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration, InputManager.moveInput);
+                //Dash(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration);
+            }
+            else
+            {
+                Move(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration, InputManager.moveInput);
+                //Dash(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration);
+            }
+        }
         
-        if(isGrounded)
-        {
-            Move(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration, InputManager.moveInput);
-            //Dash(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration);
-        }
-        else
-        {
-            Move(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration, InputManager.moveInput);
-            //Dash(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration);
-        }
     }
 
     #region Jump
@@ -407,6 +424,33 @@ public class PlayerMovementScript : MonoBehaviour
             isGrounded = false;
         }
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("RespawnBox"))
+        {
+            Debug.Log("Checked");
+            Transform child;
+            child = other.gameObject.transform.GetChild(0);
+            Debug.Log(child.name);
+            PlayerRespawnPoint = child.transform.position;
+            Debug.Log(PlayerRespawnPoint);
+        }
+        if(other.CompareTag("FallBox"))
+        {
+            Debug.Log("Fallen. Reaspawning...");
+            StartCoroutine("Respawn", other);
+        }
+    }
+
+    IEnumerator Respawn(Colider2D other)
+    {
+        disabled = true;
+        yield return new WaitForSeconds(0.01f);
+        rb.transform.position = other.gameObject.transform.GetChild(0).transform.position;
+        yield return new WaitForSeconds(0.01f);
+        disabled = false;
     }
 
     private void BumpedHead()
