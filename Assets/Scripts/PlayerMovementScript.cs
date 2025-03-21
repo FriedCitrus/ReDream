@@ -428,10 +428,10 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Transform child = null;
         if(other.CompareTag("RespawnBox"))
         {
             Debug.Log("Checked");
-            Transform child;
             child = other.gameObject.transform.GetChild(0);
             Debug.Log(child.name);
             PlayerRespawnPoint = child.transform.position;
@@ -440,15 +440,15 @@ public class PlayerMovementScript : MonoBehaviour
         if(other.CompareTag("FallBox"))
         {
             Debug.Log("Fallen. Reaspawning...");
-            StartCoroutine("Respawn", other);
+            StartCoroutine("Respawn", PlayerRespawnPoint);
         }
     }
 
-    IEnumerator Respawn(Colider2D other)
+    IEnumerator Respawn(Vector2 respawnPoint)
     {
         disabled = true;
         yield return new WaitForSeconds(0.01f);
-        rb.transform.position = other.gameObject.transform.GetChild(0).transform.position;
+        rb.transform.position = respawnPoint;
         yield return new WaitForSeconds(0.01f);
         disabled = false;
     }
