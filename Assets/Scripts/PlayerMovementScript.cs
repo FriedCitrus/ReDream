@@ -6,14 +6,28 @@ public class PlayerMovementScript : MonoBehaviour
 {
     [Header("References")]
     public PlayerMoveStats playerMoveStats;
+    public SwipeReader swipeReader;
     [SerializeField] private Collider2D feetcolider;
     [SerializeField] private Collider2D bodycolider;
-
+    //[SerializeField]private SwipeDetection swipeDetection;
     private Rigidbody2D rb;
+    private bool disabled;
+
+    private Vector2 PlayerRespawnPoint;
 
     //movement variables
     private Vector2 moveVelocity;
     private bool isFacingRight;
+
+    //dash variables
+    private bool isDashing;
+    private float DashTime;
+    private float DashCooldown;
+    private int DashCharges;
+    private Vector2 DashVelocity;
+
+    //swipe variables
+    private Vector2 DashDir;
 
     //collision variables
     private RaycastHit2D groundCheck;
@@ -47,12 +61,27 @@ public class PlayerMovementScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         isFacingRight = true;
+
+        disabled = false;
+
+        //swipeDetection.SwipeDir = "None";
+
+        var rect = new Rect(0f, 0f, 100f, 100f);
+        Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x + rect.width, rect.y ),Color.green);
+        Debug.DrawLine(new Vector3(rect.x, rect.y), new Vector3(rect.x , rect.y + rect.height), Color.red);
+        Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x + rect.width, rect.y), Color.green);
+        Debug.DrawLine(new Vector3(rect.x + rect.width, rect.y + rect.height), new Vector3(rect.x, rect.y + rect.height), Color.red);
     } 
 
     private void Update()
     {
-        JumpCheck();
-        CountTimers();
+        if(!disabled)
+        {
+            JumpCheck();
+            CountTimers();
+            //Debug.Log(swipeDetection.SwipeDir);
+        }
+        
     }
 
     private void OnDrawGizmos()
@@ -65,18 +94,23 @@ public class PlayerMovementScript : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CollisionCheck();
-        Jump();
-         
+        if(!disabled)
+        {
+            CollisionCheck();
+            Jump();
+
+            if(isGrounded)
+            {
+                Move(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration, InputManager.moveInput);
+                //Dash(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration);
+            }
+            else
+            {
+                Move(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration, InputManager.moveInput);
+                //Dash(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration);
+            }
+        }
         
-        if(isGrounded)
-        {
-            Move(playerMoveStats.GroundAcceleration, playerMoveStats.GroundDeceleration, InputManager.moveInput);
-        }
-        else
-        {
-            Move(playerMoveStats.AirAcceleration, playerMoveStats.AirDeceleration, InputManager.moveInput);
-        }
     }
 
     #region Jump
@@ -260,7 +294,7 @@ public class PlayerMovementScript : MonoBehaviour
     #region Movement
 
     private void Move(float acceleration, float deceleration, Vector2 moveInput)
-    {
+    { 
         
         if (moveInput != Vector2.zero)
         {
@@ -268,12 +302,12 @@ public class PlayerMovementScript : MonoBehaviour
             Vector2 targetVelocity = Vector2.zero;
             targetVelocity = new Vector2(moveInput.x, rb.velocity.y)*playerMoveStats.MaxwalkSpeed;
             moveVelocity = Vector2.Lerp(moveVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
-            rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y);
+            rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y)+DashVelocity;
         } 
         else if (moveInput == Vector2.zero)
         {
-            moveVelocity = Vector2.Lerp(moveVelocity, Vector2.zero, acceleration * Time.fixedDeltaTime);
-            rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y);
+            moveVelocity = Vector2.Lerp(moveVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+            rb.velocity = new Vector2(moveVelocity.x, rb.velocity.y)+DashVelocity;
         }
     }
 
@@ -302,6 +336,75 @@ public class PlayerMovementScript : MonoBehaviour
             transform.Rotate(0f, -180f, 0f);
         }
     }
+
+    #region Dashes
+/*
+    private void Dash(float acceleration, float deceleration)
+    {   
+        if(DashCooldown>0f && DashCharges > 0 && swipeDetection.SwipeDir != "None")
+        {
+            ConvertToVector(swipeDetection.SwipeDir);
+            DashCharges--;
+            isDashing = true;
+            Vector2 targetVelocity = Vector2.zero;
+            targetVelocity = new Vector2(DashDir.x, DashDir.y)*playerMoveStats.DashSpeed;
+            DashVelocity = Vector2.Lerp(DashVelocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+
+            if(DashTime <= 0)
+            {
+                DashVelocity = Vector2.Lerp(DashVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+                DashTime = playerMoveStats.DashTime;
+            }
+        }
+        else if(DashCooldown <= 0f && isGrounded)
+        {
+            DashCooldown = playerMoveStats.DashCooldown;
+            DashCharges = playerMoveStats.DashCharges;
+            isDashing = false;
+            swipeDetection.SwipeDir = "None";
+        }
+        
+    }
+
+    private void ConvertToVector(string swipe)
+    {
+        switch(swipe)
+        {
+            case "Right":
+                DashDir = new Vector2(1,0);
+                break;
+            case "Up-Right":
+                DashDir = new Vector2(1,1);
+                break;
+            case "Up":
+                DashDir = new Vector2(0,1);
+                break;
+            case "Up-Left":
+                DashDir = new Vector2(-1,1);
+                break;
+            case "Left":
+                DashDir = new Vector2(-1,0);
+                break;
+            case "Down-Left":
+                DashDir = new Vector2(-1,-1);
+                break;
+            case "Down":
+                DashDir = new Vector2(0,-1);
+                break;
+            case "Down-Right":
+                DashDir = new Vector2(1,-1);
+                break;
+            case "None":
+                DashDir = new Vector2(0,0);
+                break;
+            default:
+                break;
+        }
+    }
+
+*/
+    #endregion
+
     #endregion
 
     #region Collision Check
@@ -315,13 +418,39 @@ public class PlayerMovementScript : MonoBehaviour
         if (groundCheck.collider != null)
         {
             isGrounded = true;
-            Debug.Log("Grounded");
         }
         else
         {
             isGrounded = false;
         }
 
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Transform child = null;
+        if(other.CompareTag("RespawnBox"))
+        {
+            Debug.Log("Checked");
+            child = other.gameObject.transform.GetChild(0);
+            Debug.Log(child.name);
+            PlayerRespawnPoint = child.transform.position;
+            Debug.Log(PlayerRespawnPoint);
+        }
+        if(other.CompareTag("FallBox"))
+        {
+            Debug.Log("Fallen. Reaspawning...");
+            StartCoroutine("Respawn", PlayerRespawnPoint);
+        }
+    }
+
+    IEnumerator Respawn(Vector2 respawnPoint)
+    {
+        disabled = true;
+        yield return new WaitForSeconds(0.01f);
+        rb.transform.position = respawnPoint;
+        yield return new WaitForSeconds(0.01f);
+        disabled = false;
     }
 
     private void BumpedHead()
@@ -351,6 +480,10 @@ public class PlayerMovementScript : MonoBehaviour
     private void CountTimers()
     {
         jumpBufferTimer -= Time.deltaTime;
+        if(isDashing){
+            DashTime -= Time.deltaTime;
+            DashCooldown -= Time.deltaTime;
+        }
 
         if(!isGrounded)
         {
