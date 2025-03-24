@@ -10,8 +10,9 @@ public class PlayerMovementScript : MonoBehaviour
     [SerializeField] private Collider2D feetcolider;
     [SerializeField] private Collider2D bodycolider;
     //[SerializeField]private SwipeDetection swipeDetection;
+  
     private Rigidbody2D rb;
-    private bool disabled;
+    public bool disabled;
 
     private Vector2 PlayerRespawnPoint;
 
