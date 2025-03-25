@@ -5,32 +5,27 @@ using UnityEngine;
 public class crublescript : MonoBehaviour, IResettable
 {
     private Animator animator;
+    private Transform transform;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-    }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            animator.SetTrigger("PlayAnimation");
-        }
     }
      
-    public void Animate(bool PlayerDisabled)
+    public void Animate()
     {
-        animator.SetBool("isDisabled", PlayerDisabled);
         Debug.Log("Animating");
-        animator.SetTrigger("crumbling");
+        animator.SetBool("PlayerReset", false);
+        animator.SetBool("PlayerTouched", true);
+        //animator.SetTrigger("crumbling");
     }
 
-    public void Reset(bool PlayerDisabled)
+    public void Reset()
     {
         Debug.Log("Reseting");
-        animator.SetTrigger("reset");
-        animator.SetBool("isDisabled", PlayerDisabled);
+        //animator.SetTrigger("reset");
+        animator.SetBool("PlayerReset", true);
     }
 
 }

@@ -13,7 +13,7 @@ public class DetectPlayer : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Player entered the trigger area.");
-            crublescript.Animate(disablePlayer.disabled);
+            crublescript.Animate();
         }
     }
 }

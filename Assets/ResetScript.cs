@@ -29,7 +29,7 @@ public class ResetScript : MonoBehaviour
             if (script is IResettable resettable)
             {
                 Debug.Log("Reset");
-                resettable.Reset(disablePlayer.disabled);
+                resettable.Reset();
             }
         }
     }
@@ -37,6 +37,6 @@ public class ResetScript : MonoBehaviour
 
 public interface IResettable
 {
-    void Reset(bool PlayerDisabled);
+    void Reset();
 }
 
