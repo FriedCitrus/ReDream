@@ -41,8 +41,8 @@ MonoBehaviour:
   JumpCoyoteTime: 0.1
   DebugGroundCheckbox: 0
   DebugHeadCheckbox: 0
-  ShowWalkJump: 0
-  StopOnCollision: 0
-  DrawRight: 0
+  ShowWalkJump: 1
+  StopOnCollision: 1
+  DrawRight: 1
   JumpResolution: 49
   VirtualizationSteps: 238
